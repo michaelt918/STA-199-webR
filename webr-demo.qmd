@@ -2,6 +2,9 @@
 title: "webR-enabled code cells"
 format: html
 engine: knitr
+project:
+  type: website
+  output-dir: docs
 filters:
 - webr
 ---
@@ -9,10 +12,6 @@ filters:
 ## Demo
 
 webR-enabled code cell are established by using `{webr-r}` in a Quarto HTML document.
-
-```{webr-r}
-1 + 1
-```
 
 ## Sample cases
 
