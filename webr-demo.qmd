@@ -2,9 +2,6 @@
 title: "webR-enabled code cells"
 format: html
 engine: knitr
-project:
-  type: website
-  output-dir: docs
 filters:
 - webr
 ---
