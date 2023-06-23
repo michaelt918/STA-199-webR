@@ -396,7 +396,11 @@ library("readr")`,
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `students <- read_csv("data/students.csv", na = c("N/A", ""))`,
+      value: `read_csv(
+  "a,b,c
+  1,2,3
+  4,5,6"
+)`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
