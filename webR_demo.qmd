@@ -16,7 +16,7 @@ sessionInfo()
 
 ## Increased Package Availability
 
-webR v0.2.0 has added about 51% of all CRAN packages. Give this block a while to run.
+webR v0.2.0 has added about 51% of all CRAN packages. You can view them [here](https://repo.r-wasm.org/). Give this block a while to run.
 
 ```{webr-r}
 webr::install("readr")
