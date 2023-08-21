@@ -6,7 +6,7 @@ filters:
 - webr
 ---
 
-## Demo
+## sessionInfo()
 
 This displays the installed packages and version of webR.
 
@@ -16,30 +16,32 @@ sessionInfo()
 
 ## Increased Package Availability
 
-webR v0.2.0 has added about 51% of all CRAN packages. You can view them [here](https://repo.r-wasm.org/). Give this block a while to run.
+webR v0.2.0 has added about 51% of all CRAN packages. You can view them at the webR repo [here](https://repo.r-wasm.org/). Give this block a while to run.
 
 ```{webr-r}
-webr::install("readr")
 webr::install("ggplot2")
-library("readr")
 library("ggplot2")
 ```
 
-In Quarto, you can't upload a file from your computer, but you can copy paste a csv file in.
+## Downloading csv files
+
+Only certain URL's can be accessed by webR due to web browser security settings. However, raw files on Github are able to be accessed like in the following code cell. There is some more detail in [this](https://github.com/r-wasm/webr/issues/252#issuecomment-1685820473) Github comment.
 
 ```{webr-r}
-students <- read_csv("Student ID,Full Name,favourite.food,mealPlan,AGE
-1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
-2,Barclay Lynn,French fries,Lunch only,5
-3,Jayendra Lyne,N/A,Breakfast and lunch,7
-4,Leon Rossini,Anchovies,Lunch only,
-5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
-6,Güvenç Attila,Ice cream,Lunch only,6")
+download.file(
+  "https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv",
+  "penguins.csv"
+)
+penguins <- read.csv("penguins.csv")
 ```
 
 ```{webr-r}
-students
+head(penguins)
 ```
+
+## Graphing Demo
+
+Install necessary packages
 
 ```{webr-r}
 webr::install("palmerpenguins")
@@ -48,7 +50,7 @@ library(palmerpenguins)
 library(ggthemes)
 ```
 
-Try editing this block to see your changes!
+Make a graph, and edit it to see your changes!
 
 ```{webr-r}
 ggplot(
@@ -66,7 +68,44 @@ ggplot(
   scale_color_colorblind()
 ```
 
-Empty code cell
+## Problems with `?` and `help()`
+
+The default versions of these methods don't work, since they would typically open the help file in another window.
+
+Here is an example of the error you would see
+
+```{webr-r}
+help(mean)
+```
+
+However, there is a workaround you can do by defining a new function to print the help file to the console. The source for this function is an R-bloggers post [here](https://www.r-bloggers.com/2013/06/printing-r-help-files-in-the-console-or-in-knitr-documents/).
+
+```{webr-r}
+help_console <- function(topic, format=c("text", "html", "latex", "Rd"),
+                         lines=NULL, before=NULL, after=NULL) {  
+  format=match.arg(format)
+  if (!is.character(topic)) topic <- deparse(substitute(topic))
+  helpfile = utils:::.getHelpFile(help(topic))
+
+  hs <- capture.output(switch(format, 
+                              text=tools:::Rd2txt(helpfile),
+                              html=tools:::Rd2HTML(helpfile),
+                              latex=tools:::Rd2latex(helpfile),
+                              Rd=tools:::prepare_Rd(helpfile)
+                              )
+                      )
+  if(!is.null(lines)) hs <- hs[lines]
+  hs <- c(before, hs, after)
+  cat(hs, sep="\n")
+  invisible(hs)
+}
+```
+
+```{webr-r}
+help_console(mean)
+```
+
+## Empty code cell
 
 ```{webr-r}
 
